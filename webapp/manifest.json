@@ -66,7 +66,7 @@
             "sapFiori2Adaptation": true
         },
         "rootView": {
-            "viewName": "fin.ar.correspondence.create.v2.view.App",
+            "viewName": "otc.ar.correspondence.create.v2.view.App",
             "type": "XML",
             "id": "app"
         },
@@ -105,7 +105,7 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "fin.ar.correspondence.create.v2.i18n.i18n"
+                    "bundleName": "otc.ar.correspondence.create.v2.i18n.i18n"
                 }
             },
             "": {
@@ -122,7 +122,7 @@
             "config": {
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
-                "viewPath": "fin.ar.correspondence.create.v2.view",
+                "viewPath": "otc.ar.correspondence.create.v2.view",
                 "controlId": "app",
                 "controlAggregation": "pages",
                 "bypassed": {

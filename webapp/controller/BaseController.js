@@ -8,7 +8,7 @@ sap.ui.define([
 ], function(Controller, History, UIComponent) {
 	"use strict";
 
-	return Controller.extend("fin.ar.correspondence.create.v2.controller.BaseController", {
+	return Controller.extend("otc.ar.correspondence.create.v2.controller.BaseController", {
 		metadata: {
 			"abstract": true
 		},

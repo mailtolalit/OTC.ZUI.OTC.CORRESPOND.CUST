@@ -7,7 +7,7 @@ sap.ui.define([
 ], function(UI5Object, MessageBox) {
 	"use strict";
 
-	return UI5Object.extend("fin.ar.correspondence.create.v2.controller.ErrorHandler", {
+	return UI5Object.extend("otc.ar.correspondence.create.v2.controller.ErrorHandler", {
 
 		/**
 		 * Error code for 'getCorrespondences', when company doesn't exist
@@ -34,7 +34,7 @@ sap.ui.define([
 		 * @class
 		 * @param {sap.ui.core.UIComponent} oComponent reference to the app's component
 		 * @public
-		 * @alias fin.ar.correspondence.create.v2.controller.ErrorHandler
+		 * @alias otc.ar.correspondence.create.v2.controller.ErrorHandler
 		 */
 		constructor: function(oComponent) {
 			this._oResourceBundle = oComponent.getModel("i18n").getResourceBundle();

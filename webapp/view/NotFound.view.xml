@@ -4,7 +4,7 @@
 
 -->
 <mvc:View
-		controllerName="fin.ar.correspondence.create.v2.controller.NotFound"
+		controllerName="otc.ar.correspondence.create.v2.controller.NotFound"
 		xmlns="sap.m"
 		xmlns:mvc="sap.ui.core.mvc"
 >

@@ -32,7 +32,7 @@ sap.ui.define([
 		ValueHelpRangeOperation.StartsWith
 	]);
 
-	return ManagedObject.extend("fin.ar.correspondence.create.v2.controller.utils.ValueHelpHandler", {
+	return ManagedObject.extend("otc.ar.correspondence.create.v2.controller.utils.ValueHelpHandler", {
 		/**
 		 * @typedef {Object} ValueHelpParams
 		 * @property {Object} model oData model used for value help requests

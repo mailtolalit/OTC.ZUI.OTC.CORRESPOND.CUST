@@ -10,7 +10,7 @@ sap.ui.define([
 	"./utils/Mappings",
 	"./utils/UrlParametersParser",
 	"sap/ui/core/ValueState",
-	"fin/ar/correspondence/create/v2/controller/BaseController",
+	"otc/ar/correspondence/create/v2/controller/BaseController",
 	"sap/ui/generic/app/navigation/service/NavigationHandler",
 	"sap/ui/generic/app/navigation/service/SelectionVariant",
 	"sap/ui/generic/app/navigation/service/NavType",
@@ -69,7 +69,7 @@ sap.ui.define([
 	var mDisplaySettings = Mappings.DisplaySettings;
 
 
-	return BaseController.extend("fin.ar.correspondence.create.v2.controller.Main", {
+	return BaseController.extend("otc.ar.correspondence.create.v2.controller.Main", {
 		constructor: function() {
 			BaseController.apply(this, arguments);
 
@@ -156,7 +156,7 @@ sap.ui.define([
 
 			this.oEmailFormController = new EmailController("form");
 
-			var aControls = sap.ui.xmlfragment(this.oEmailFormController.Id, "fin.ar.correspondence.create.v2.view.EmailForm", this.oEmailFormController);
+			var aControls = sap.ui.xmlfragment(this.oEmailFormController.Id, "otc.ar.correspondence.create.v2.view.EmailForm", this.oEmailFormController);
 			var oInvisibleLabel = aControls[0];
 			var oEmailFormFragment = aControls[1];
 
@@ -477,13 +477,13 @@ sap.ui.define([
 				case mControllers.Email:
 					if (!this.oEmailController) {
 						this.oEmailController = new EmailController();
-						this.oEmailDialog = this._initDialog(this.oEmailController, "fin.ar.correspondence.create.v2.view.Email");
+						this.oEmailDialog = this._initDialog(this.oEmailController, "otc.ar.correspondence.create.v2.view.Email");
 					}
 					break;
 				case mControllers.Print:
 					if (!this.oPrintController) {
 						this.oPrintController = new PrintController();
-						this.oPrintDialog = this._initDialog(this.oPrintController, "fin.ar.correspondence.create.v2.view.Print");
+						this.oPrintDialog = this._initDialog(this.oPrintController, "otc.ar.correspondence.create.v2.view.Print");
 						this.oPrintDialog.setBindingContext(this.oPrintContext);
 					}
 					break;
@@ -921,7 +921,7 @@ sap.ui.define([
 			}
 			this.setActiveItemBindingContext(oNewBindingContext);
 
-			var oItem = sap.ui.xmlfragment("fin.ar.correspondence.create.v2.view.CorrItem", this);
+			var oItem = sap.ui.xmlfragment("otc.ar.correspondence.create.v2.view.CorrItem", this);
 			oItem.setBindingContext(oNewBindingContext, mModelNames.CorrItems);
 			this.oList.addItem(oItem);
 			this.oActiveCorrListItem = oItem;
@@ -3103,7 +3103,7 @@ sap.ui.define([
 		 * @returns {String} Url of Fake Preview
 		 */
 		_getFakePreviewUrl: function() {
-			return jQuery.sap.getModulePath("fin.ar.correspondence.create.v2", "/localService/correspondence.pdf");
+			return jQuery.sap.getModulePath("otc.ar.correspondence.create.v2", "/localService/correspondence.pdf");
 		},
 
 		/**

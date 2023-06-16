@@ -17,7 +17,7 @@
 	>
 		<content>
 			<core:Fragment
-					fragmentName="fin.ar.correspondence.create.v2.view.EmailForm"
+					fragmentName="otc.ar.correspondence.create.v2.view.EmailForm"
 					type="XML"
 			/>
 		</content>

@@ -3,7 +3,7 @@
  */
 sap.ui.define([
 	"sap/ui/core/Fragment",
-	"fin/ar/correspondence/create/v2/controller/Dialog.controller",
+	"otc/ar/correspondence/create/v2/controller/Dialog.controller",
 	"./utils/Mappings",
 	"sap/m/MessageToast"
 ], function(Fragment, DialogController, Mappings, MessageToast) {
@@ -15,7 +15,7 @@ sap.ui.define([
 	var mModelNames = Mappings.ModelNames;
 	var mPrinters = Mappings.Printers;
 
-	return DialogController.extend("fin.ar.correspondence.create.v2.controller.Print", {
+	return DialogController.extend("otc.ar.correspondence.create.v2.controller.Print", {
 		Id: mIds.PrintDialog,
 		_sPrintType: "",
 		_oPrintSmartField: null,

@@ -2,12 +2,12 @@
  * Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
  */
 sap.ui.define([
-	"fin/ar/correspondence/create/v2/controller/BaseController",
+	"otc/ar/correspondence/create/v2/controller/BaseController",
 	"sap/ui/model/json/JSONModel"
 ], function(BaseController, JSONModel) {
 	"use strict";
 
-	return BaseController.extend("fin.ar.correspondence.create.v2.controller.App", {
+	return BaseController.extend("otc.ar.correspondence.create.v2.controller.App", {
 
 		onInit: function() {
 			var oViewModel = new JSONModel({

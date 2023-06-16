@@ -5,7 +5,7 @@
 -->
 <mvc:View
 		xmlns:mvc="sap.ui.core.mvc"
-		controllerName="fin.ar.correspondence.create.v2.controller.App"
+		controllerName="otc.ar.correspondence.create.v2.controller.App"
 		displayBlock="true"
 		xmlns="sap.m"
 >

@@ -3,7 +3,7 @@
  */
 sap.ui.define([
 	"sap/ui/core/Fragment",
-	"fin/ar/correspondence/create/v2/controller/Dialog.controller",
+	"otc/ar/correspondence/create/v2/controller/Dialog.controller",
 	"./utils/ModelUtils",
 	"./utils/DateFormat",
 	"sap/ui/core/ValueState",
@@ -31,7 +31,7 @@ sap.ui.define([
 	var mRegularPatterns = Mappings.RegularPatterns;
 
 
-	var EmailController = DialogController.extend("fin.ar.correspondence.create.v2.controller.Email", {
+	var EmailController = DialogController.extend("otc.ar.correspondence.create.v2.controller.Email", {
 		Id: mIds.EmailDialog,
 
 		constructor: function(sIdSuffix) {

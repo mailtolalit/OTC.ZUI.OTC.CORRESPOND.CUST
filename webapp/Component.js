@@ -4,12 +4,12 @@
 sap.ui.define([
 		"sap/ui/core/UIComponent",
 		"sap/ui/Device",
-		"fin/ar/correspondence/create/v2/model/models",
-		"fin/ar/correspondence/create/v2/controller/ErrorHandler"
+		"otc/ar/correspondence/create/v2/model/models",
+		"otc/ar/correspondence/create/v2/controller/ErrorHandler"
 	], function (UIComponent, Device, models, ErrorHandler) {
 		"use strict";
 
-		return UIComponent.extend("fin.ar.correspondence.create.v2.Component", {
+		return UIComponent.extend("otc.ar.correspondence.create.v2.Component", {
 
 			metadata : {
 				manifest: "json"

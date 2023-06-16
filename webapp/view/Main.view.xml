@@ -3,7 +3,7 @@
     Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
 
 -->
-<mvc:View controllerName="fin.ar.correspondence.create.v2.controller.Main" xmlns:html="http://www.w3.org/1999/xhtml"
+<mvc:View controllerName="otc.ar.correspondence.create.v2.controller.Main" xmlns:html="http://www.w3.org/1999/xhtml"
 		  xmlns:mvc="sap.ui.core.mvc"
 		  xmlns:core="sap.ui.core"
 		  xmlns="sap.m"
@@ -165,7 +165,7 @@
 											vertical="true"
 											horizontal="false">
 										<core:Fragment
-												fragmentName="fin.ar.correspondence.create.v2.view.CorrForm"
+												fragmentName="otc.ar.correspondence.create.v2.view.CorrForm"
 												type="XML"
 										/>
 									</ScrollContainer>

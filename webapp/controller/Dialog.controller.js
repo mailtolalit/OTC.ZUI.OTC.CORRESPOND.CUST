@@ -2,7 +2,7 @@
  * Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
  */
 sap.ui.define([
-	"fin/ar/correspondence/create/v2/controller/BaseController",
+	"otc/ar/correspondence/create/v2/controller/BaseController",
 	"sap/ui/core/ValueState",
 	"sap/ui/comp/valuehelpdialog/ValueHelpDialog",
 	"sap/ui/comp/filterbar/FilterBar",
@@ -30,7 +30,7 @@ sap.ui.define([
 	var mPropertyTypes = Mappings.ModelPropertyTypes;
 
 
-	return BaseController.extend("fin.ar.correspondence.create.v2.controller.Dialog", {
+	return BaseController.extend("otc.ar.correspondence.create.v2.controller.Dialog", {
 		initDialog: function(oOptions) {
 			var that = this;
 
