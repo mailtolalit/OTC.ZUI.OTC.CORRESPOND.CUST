@@ -1,0 +1,38 @@
+<!--
+
+    Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition
+		xmlns="sap.m"
+		xmlns:core="sap.ui.core"
+>
+	<Dialog
+			title="{i18n>EMAILTITLE}"
+			id="idEmailDialogDialog"
+			class="sapUiPopupWithPadding"
+			resizable="true"
+			draggable="true"
+			contentWidth="780px"
+	>
+		<content>
+			<core:Fragment
+					fragmentName="fin.ar.correspondence.create.v2.view.EmailForm"
+					type="XML"
+			/>
+		</content>
+		<buttons>
+			<Button
+					text="{i18n>SEND_EMAIL}"
+					press="onEmail"
+					id="idSendEmailDialogButton"
+					type="Emphasized"
+			/>
+			<Button
+					id="idCloseEmailDialogButton"
+					text="{i18n>CANCEL}"
+					press="onEmailDialogCloseButton"
+			/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

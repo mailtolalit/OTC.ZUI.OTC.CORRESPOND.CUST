@@ -1,0 +1,69 @@
+<!--
+
+    Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition
+		xmlns="sap.m"
+		xmlns:core="sap.ui.core"
+		xmlns:sap.ui.dt="sap.ui.dt"
+>
+	<ObjectListItem
+			xmlns="sap.m"
+			title="{parts: [{path: 'corrItems>Title'}, {path: 'corrItems>Id'}], formatter: '.formatTitle'}"
+			type="Active"
+			selected="{corrItems>IsSelected}"
+			sap.ui.dt:designtime="not-adaptable"
+	>
+		<attributes>
+			<ObjectAttribute
+					title="{/#CorrespondenceOutput/CompanyCode/@sap:label}"
+					text="{parts:[{path:'corrItems>BasicFields/CompanyCode'}, {path:'corrItems>BasicFields/CompanyCodeName'}], formatter:'.formatCorrespondenceItem'}"
+					visible="{= ${globalSettings>/OverviewFields/CompanyCode} &amp;&amp; ${corrItems>Visible/CompanyCode}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+			<ObjectAttribute
+					title="{/#CorrespondenceOutput/Event/@sap:label}"
+					text="{parts:[{path:'corrItems>SelectedCorrespondence/Event'}, {path:'corrItems>SelectedCorrespondence/Name'}], formatter:'.formatCorrespondenceItem'}"
+					visible="{= ${globalSettings>/OverviewFields/CorrespondenceType} &amp;&amp; ${corrItems>Visible/CorrespondenceType}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+			<ObjectAttribute
+					title="{/#CorrespondenceOutput/CustomerNumber/@sap:label}"
+					text="{parts:[{path:'corrItems>BasicFields/CustomerNumber'}, {path:'corrItems>BasicFields/CustomerName'}], formatter:'.formatCorrespondenceItem'}"
+					visible="{= ${globalSettings>/OverviewFields/CustomerNumber} &amp;&amp; ${corrItems>Visible/CustomerNumber}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+			<ObjectAttribute
+					title="{/#CorrespondenceOutput/VendorNumber/@sap:label}"
+					text="{parts:[{path:'corrItems>BasicFields/VendorNumber'}, {path:'corrItems>BasicFields/VendorName'}], formatter:'.formatCorrespondenceItem'}"
+					visible="{= ${globalSettings>/OverviewFields/VendorNumber} &amp;&amp; ${corrItems>Visible/VendorNumber}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+			<ObjectAttribute
+					title="{/#CorrespondenceOutput/DocumentNumber/@sap:label}"
+					text="{corrItems>BasicFields/DocumentNumber}"
+					visible="{= ${globalSettings>/OverviewFields/DocumentNumber} &amp;&amp; ${corrItems>Visible/DocumentNumber}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+			<ObjectAttribute
+					title="{/#CorrespondenceOutput/FiscalYear/@sap:label}"
+					text="{corrItems>BasicFields/FiscalYear}"
+					visible="{= ${globalSettings>/OverviewFields/FiscalYear} &amp;&amp; ${corrItems>Visible/FiscalYear}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+			<ObjectAttribute
+					title="{corrItems>SelectedCorrespondence/Date1Text}"
+					text="{path: 'corrItems>BasicFields/Date1', type: 'sap.ui.model.type.Date', formatOptions:{ UTC: 'true'} }"
+					visible="{= ${globalSettings>/OverviewFields/Date1} &amp;&amp; ${corrItems>Visible/Date1}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+			<ObjectAttribute
+					title="{corrItems>SelectedCorrespondence/Date2Text}"
+					text="{path: 'corrItems>BasicFields/Date2', type: 'sap.ui.model.type.Date', formatOptions:{ UTC: 'true'} }"
+					visible="{= ${globalSettings>/OverviewFields/Date2} &amp;&amp; ${corrItems>Visible/Date2}}"
+					sap.ui.dt:designtime="not-adaptable"
+			/>
+		</attributes>
+	</ObjectListItem>
+</core:FragmentDefinition>

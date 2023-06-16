@@ -1,0 +1,100 @@
+<!--
+
+    Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition
+		xmlns="sap.m"
+		xmlns:core="sap.ui.core"
+		xmlns:sf="sap.ui.comp.smartfield"
+		xmlns:f="sap.ui.layout.form"
+>
+	<Dialog
+			title="{i18n>PRINTTITLE}"
+			id="idPrintDialogDialog"
+			class="sapUiPopupWithPadding"
+			contentWidth="400px"
+			resizable="true"
+			draggable="true"
+	>
+		<content>
+			<Text
+					id="idMassPrintText"
+					visible="false"
+			/>
+			<f:SimpleForm
+					id="idPrinterForm"
+					class="sapUiForceWidthAuto"
+					editable="true"
+					layout="ResponsiveGridLayout"
+					visible="{display>/Printer}"
+			>
+				<f:content>
+					<sf:SmartLabel
+							labelFor="idPrinter"
+							id="idLabelPrinter"
+					/>
+					<sf:SmartField
+							value="{Printer}"
+							id="idPrinter"
+							change="onPrintChanged"
+					/>
+				</f:content>
+			</f:SimpleForm>
+
+			<f:SimpleForm
+					id="idPrintQueueForm"
+					class="sapUiForceWidthAuto"
+					editable="true"
+					layout="ResponsiveGridLayout"
+					visible="{display>/PrintQueue}"
+			>
+				<f:content>
+					<sf:SmartLabel
+							id="idLabelPrintQueue"
+							labelFor="idPrintQueue"
+					/>
+					<sf:SmartField
+							value="{PrintQueue}"
+							id="idPrintQueue"
+							change="onPrintChanged"
+					/>
+				</f:content>
+			</f:SimpleForm>
+			<f:SimpleForm
+					id="idPrintQueueSpoolForm"
+					class="sapUiForceWidthAuto"
+					editable="true"
+					layout="ResponsiveGridLayout"
+					visible="{display>/PrintQueueSpool}"
+			>
+				<f:content>
+					<sf:SmartLabel
+							id="idLabelPrintQueueSpool"
+							labelFor="idPrintQueueSpool"
+					/>
+					<sf:SmartField
+							value="{PrintQueueSpool}"
+							id="idPrintQueueSpool"
+							change="onPrintChanged"
+					/>
+				</f:content>
+			</f:SimpleForm>
+		</content>
+		<beginButton>
+			<Button
+					text="{i18n>PRINT}"
+					press="onPrint"
+					id="idConfirmPrintDialogButton"
+					type="Emphasized"
+			/>
+		</beginButton>
+		<endButton>
+			<Button
+					id="idClosePrintDialogButton"
+					text="{i18n>CANCEL}"
+					press="onPrintDialogCloseButton"
+			/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

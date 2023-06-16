@@ -1,0 +1,174 @@
+{
+    "_version": "1.11.0",
+    "sap.app": {
+        "id": "otc.ar.correspondence.create.v2",
+        "type": "application",
+        "resources": "resources.json",
+        "i18n": "i18n/i18n.properties",
+        "title": "{{TITLE}}",
+        "description": "{{appDescription}}",
+        "applicationVersion": {
+            "version": "10.0.3"
+        },
+        "ach": "FI-FIO-AR",
+        "dataSources": {
+            "mainService": {
+                "uri": "/sap/opu/odata/sap/FI_CORRESPONDENCE_V2_SRV/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [
+                        "FI_CORRESPONDENCE_V2_ANNO_MDL"
+                    ],
+                    "localUri": "localService/metadata.xml"
+                }
+            },
+            "FI_CORRESPONDENCE_V2_ANNO_MDL": {
+                "uri": "/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='FI_CORRESPONDENCE_V2_ANNO_MDL',Version='0001')/$value/",
+                "type": "ODataAnnotation",
+                "settings": {
+                    "localUri": "localService/FI_CORRESPONDENCE_V2_ANNO_MDL.xml"
+                }
+            }
+        },
+        "sourceTemplate": {
+            "id": "sap.ui.ui5-template-plugin.1worklist",
+            "version": "1.36.2",
+            "toolsId": "e37ebda0-f663-4595-a350-00c5bacbeae4"
+        }
+    },
+    "sap.fiori": {
+        "registrationIds": [
+            "F0744A"
+        ],
+        "archeType": "transactional"
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "sap-icon://Fiori5/F0744"
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": false
+        },
+        "supportedThemes": [
+            "sap_hcb",
+            "sap_bluecrystal"
+        ],
+        "fullWidth": true
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "config": {
+            "fullWidth": true,
+            "sapFiori2Adaptation": true
+        },
+        "rootView": {
+            "viewName": "fin.ar.correspondence.create.v2.view.App",
+            "type": "XML",
+            "id": "app"
+        },
+        "dependencies": {
+            "minUI5Version": "1.100.0",
+            "libs": {
+                "sap.collaboration": {
+                    "lazy": false
+                },
+                "sap.m": {
+                    "lazy": false
+                },
+                "sap.ui.core": {
+                    "lazy": false
+                },
+                "sap.ui.comp": {
+                    "lazy": false
+                },
+                "sap.ui.generic.app": {
+                    "lazy": false
+                },
+                "sap.ui.layout": {
+                    "lazy": false
+                },
+                "sap.ushell": {
+                    "lazy": false
+                }
+            },
+            "components": {}
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "fin.ar.correspondence.create.v2.i18n.i18n"
+                }
+            },
+            "": {
+                "preload": true,
+                "dataSource": "mainService",
+                "settings": {
+                    "metadataUrlParams": {
+                        "sap-documentation": "heading"
+                    }
+                }
+            }
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "viewPath": "fin.ar.correspondence.create.v2.view",
+                "controlId": "app",
+                "controlAggregation": "pages",
+                "bypassed": {
+                    "target": "notFound"
+                },
+                "async": true
+            },
+            "routes": [
+                {
+                    "name": "main",
+                    "pattern": ":?query:",
+                    "target": "main"
+                },
+                {
+                    "pattern": "preview:?query:",
+                    "name": "object",
+                    "target": "main"
+                }
+            ],
+            "targets": {
+                "main": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearAggregation": true,
+                    "viewName": "Main",
+                    "viewId": "main",
+                    "viewLevel": 1,
+                    "controlAggregation": "pages"
+                },
+                "notFound": {
+                    "viewName": "NotFound",
+                    "transition": "show",
+                    "viewId": "notFound"
+                }
+            }
+        },
+        "services": {
+            "ShellUIService": {
+                "factoryName": "sap.ushell.ui5service.ShellUIService"
+            }
+        }
+    },
+    "sap.copilot": {
+        "_version": "1.0.0",
+        "contextAnalysis": {
+            "allowAddingObjectsFromAppScreenToCollection": false
+        }
+    }
+}

@@ -1,0 +1,996 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+	<edmx:Reference Uri="localhost/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="localhost/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+	</edmx:Reference>
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema Namespace="FI_CORRESPONDENCE_V2_SRV" sap:schema-version="1" xml:lang="en" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityType Name="DefaultValue" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Name"/>
+				</Key>
+				<Property Name="Name" Nullable="false" Type="Edm.String" sap:creatable="false" sap:label="Key" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="Value" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Data" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="PDF" m:HasStream="true" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ApplicationObjectId"/>
+				</Key>
+				<Property MaxLength="255" Name="ApplicationObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Appl. Object ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="Document" Nullable="false" Type="Edm.Binary" sap:creatable="false" sap:filterable="false" sap:label="PDF" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="XML" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ApplicationObjectId"/>
+				</Key>
+				<Property MaxLength="255" Name="ApplicationObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Appl. Object ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="Document" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="XML" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="Print" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ApplicationObjectId"/>
+				</Key>
+				<Property MaxLength="255" Name="ApplicationObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Appl. Object ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="4" Name="Printer" Type="Edm.String" sap:filterable="false" sap:label="Printer" sap:sortable="false" sap:unicode="false" sap:value-list="standard"/>
+				<Property MaxLength="32" Name="PrintQueue" Type="Edm.String" sap:filterable="false" sap:label="Print Queue" sap:sortable="false" sap:unicode="false" sap:value-list="standard"/>
+				<Property MaxLength="32" Name="PrintQueueSpool" Type="Edm.String" sap:filterable="false" sap:label="Print Queue" sap:sortable="false" sap:unicode="false" sap:value-list="standard"/>
+			</EntityType>
+			<EntityType Name="Fax" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ApplicationObjectId"/>
+				</Key>
+				<Property MaxLength="255" Name="ApplicationObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Appl. Object ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="3" Name="FaxCountryCode" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Country" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="30" Name="FaxNumber" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Number" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="10" Name="FaxExtens" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Extension" sap:sortable="false" sap:unicode="false"/>
+			</EntityType>
+			<EntityType Name="Email" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ApplicationObjectId"/>
+				</Key>
+				<Property MaxLength="255" Name="ApplicationObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Appl. Object ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="To" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="To" sap:sortable="false" sap:unicode="false" sap:value-list="standard"/>
+				<Property Name="Cc" Type="Edm.String" sap:filterable="false" sap:label="Cc" sap:sortable="false" sap:unicode="false"/>
+				<Property Name="Bcc" Type="Edm.String" sap:filterable="false" sap:label="Bcc" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="241" Name="SenderAddress" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="From" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="255" Name="Subject" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Subject" sap:sortable="false" sap:unicode="false"/>
+				<Property Name="Content" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Message" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="30" Name="MailTemplateId" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Email Template" sap:sortable="false" sap:unicode="false"/>
+			</EntityType>
+			<EntityType Name="CorrespondenceOutput" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ApplicationObjectId"/>
+				</Key>
+				<Property MaxLength="255" Name="ApplicationObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Appl. Object ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="Event" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Correspondence" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="5" Name="CorrespondenceTypeId" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Corr. Identifier" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="5" Name="VariantId" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Parameters Variant" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="4" Name="CompanyCode" Nullable="false" Type="Edm.String" sap:filterable="false" sap:label="Company Code" sap:sortable="false" sap:unicode="false" sap:value-list="standard"/>
+				<Property MaxLength="10" Name="CustomerNumber" Type="Edm.String" sap:display-format="UpperCase" sap:filterable="false" sap:label="Customer" sap:sortable="false" sap:unicode="false" sap:value-list="standard"/>
+				<Property MaxLength="10" Name="VendorNumber" Type="Edm.String" sap:display-format="UpperCase" sap:filterable="false" sap:label="Supplier" sap:sortable="false" sap:unicode="false" sap:value-list="standard"/>
+				<Property MaxLength="1" Name="AccountType" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Account Type" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="10" Name="DocumentNumber" Type="Edm.String" sap:filterable="false" sap:label="Journal Entry" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="4" Name="FiscalYear" Type="Edm.String" sap:filterable="false" sap:label="Fiscal Year" sap:sortable="false" sap:unicode="false"/>
+				<Property Name="Date1" Precision="0" Type="Edm.DateTime" sap:filterable="false" sap:label="Date" sap:sortable="false" sap:unicode="false"/>
+				<Property Name="Date2" Precision="0" Type="Edm.DateTime" sap:filterable="false" sap:label="Date" sap:sortable="false" sap:unicode="false"/>
+				<Property Name="OutputParams" Type="Edm.String" sap:filterable="false" sap:label="Advanced Parameters" sap:sortable="false" sap:unicode="false"/>
+				<NavigationProperty FromRole="FromRole_toMessage" Name="MessageSet" Relationship="FI_CORRESPONDENCE_V2_SRV.toMessage" ToRole="ToRole_toMessage"/>
+				<NavigationProperty FromRole="FromRole_toFax" Name="Fax" Relationship="FI_CORRESPONDENCE_V2_SRV.toFax" ToRole="ToRole_toFax"/>
+				<NavigationProperty FromRole="FromRole_toPrint" Name="Print" Relationship="FI_CORRESPONDENCE_V2_SRV.toPrint" ToRole="ToRole_toPrint"/>
+				<NavigationProperty FromRole="FromRole_toEmail" Name="Email" Relationship="FI_CORRESPONDENCE_V2_SRV.toEmail" ToRole="ToRole_toEmail"/>
+				<NavigationProperty FromRole="FromRole_toXML" Name="XML" Relationship="FI_CORRESPONDENCE_V2_SRV.toXML" ToRole="ToRole_toXML"/>
+				<NavigationProperty FromRole="FromRole_toPDF" Name="PDF" Relationship="FI_CORRESPONDENCE_V2_SRV.toPDF" ToRole="ToRole_toPDF"/>
+			</EntityType>
+			<EntityType Name="Message" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ApplObjectId"/>
+				</Key>
+				<Property MaxLength="255" Name="ApplObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Appl. Object ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="3" Name="MessageId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Message ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="20" Name="Class" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Message Class" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="1" Name="Type" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Message Type" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="3" Name="Num" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Message number" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="Text" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="TEXT" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="PrintType" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Printer"/>
+					<PropertyRef Name="PrintQueue"/>
+					<PropertyRef Name="PrintQueueSpool"/>
+				</Key>
+				<Property MaxLength="4" Name="Printer" Nullable="false" Type="Edm.String" sap:label="Printer" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="32" Name="PrintQueue" Nullable="false" Type="Edm.String" sap:label="Print Queue" sap:sortable="false" sap:unicode="false"/>
+				<Property MaxLength="32" Name="PrintQueueSpool" Nullable="false" Type="Edm.String" sap:label="Print Queue" sap:sortable="false" sap:unicode="false"/>
+			</EntityType>
+			<EntityType Name="Printer" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="ShortDeviceName"/>
+					<PropertyRef Name="DeviceType"/>
+					<PropertyRef Name="Location"/>
+					<PropertyRef Name="OutputDevice"/>
+				</Key>
+				<Property MaxLength="30" Name="LongDeviceName" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Output Device" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="4" Name="ShortDeviceName" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filter-restriction="single-value" sap:label="Short name" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="8" Name="DeviceType" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Device type" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="64" Name="Location" Nullable="false" Type="Edm.String" sap:creatable="false" sap:label="Location" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="64" Name="LocationStatusMessage" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filter-restriction="single-value" sap:filterable="false" sap:label="Location" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="30" Name="OutputDevice" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filter-restriction="single-value" sap:label="Printer" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="SupportedChannel" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Event"/>
+					<PropertyRef Name="VariantId"/>
+					<PropertyRef Name="CorrespondenceTypeId"/>
+				</Key>
+				<Property MaxLength="5" Name="Event" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Event" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="VariantId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Variant" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="CorrespondenceTypeId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:label="Correspondence Name" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="10" Name="ChannelName" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Channel" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="Result" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Id"/>
+				</Key>
+				<Property MaxLength="32" Name="Id" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="255" Name="ApplicationObjectId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="30" Name="ApplicationObjectType" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="63" Name="LegacyId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="1" Name="MaxSeverity" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="65000" Name="Messages" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:semantics="BE messages in JSON" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="CorrespondenceType" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Event"/>
+					<PropertyRef Name="VariantId"/>
+					<PropertyRef Name="Id"/>
+				</Key>
+				<Property MaxLength="5" Name="Event" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Correspondence" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="VariantId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Parameters Variant" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="Id" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Corr. Identifier" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="40" Name="Name" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Cor. Label" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="RequiresAccountNumber" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="Acct Required" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="RequiresDocument" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="Doc.Necessary" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="NumberOfDates" Nullable="false" Type="Edm.Int16" sap:creatable="false" sap:filterable="false" sap:label="No.Date Specif." sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="20" Name="Date1Text" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Date 1 Name" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="20" Name="Date2Text" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Date 2 Name" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="4" Name="CompanyCode" Nullable="false" Type="Edm.String" sap:creatable="false" sap:label="Company Code" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<NavigationProperty FromRole="FromRole_toSupportedChannel" Name="SupportedChannelSet" Relationship="FI_CORRESPONDENCE_V2_SRV.toSupportedChannel" ToRole="ToRole_toSupportedChannel"/>
+				<NavigationProperty FromRole="FromRole_toParametersGroup" Name="ParametersGroupSet" Relationship="FI_CORRESPONDENCE_V2_SRV.toParametersGroup" ToRole="ToRole_toParametersGroup"/>
+				<NavigationProperty FromRole="FromRole_toParameter" Name="ParameterSet" Relationship="FI_CORRESPONDENCE_V2_SRV.toParameter" ToRole="ToRole_toParameter"/>
+				<NavigationProperty FromRole="FromRole_toEmailTemplate" Name="EmailTemplateSet" Relationship="FI_CORRESPONDENCE_V2_SRV.toEmailTemplate" ToRole="ToRole_toEmailTemplate"/>
+			</EntityType>
+			<EntityType Name="Parameter" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Event"/>
+					<PropertyRef Name="VariantId"/>
+					<PropertyRef Name="CorrespondenceTypeId"/>
+					<PropertyRef Name="ParametersGroupId"/>
+					<PropertyRef Name="Id"/>
+				</Key>
+				<Property MaxLength="5" Name="Event" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Event" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="VariantId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Variant" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="CorrespondenceTypeId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Corr. Identifier" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="ParametersGroupId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Parameters Group" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="30" Name="Id" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Parameter name" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="60" Name="Caption" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Label" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="2" Name="Position" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Position" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="NoLabel" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="No label" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="4" Name="RadioGroup" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Radio Group" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="IsMandatory" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="Mandatory parameter" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="IsHidden" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="Hidden parameter" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="IsReadOnly" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="Read-only parameter" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="1" Name="Type" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Type" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="IsRange" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="Range" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="RawValue" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Value" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="Configuration" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Name"/>
+				</Key>
+				<Property Name="Name" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="NAME" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="Value" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="VALUE" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="EmailTemplate" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Event"/>
+					<PropertyRef Name="VariantId"/>
+					<PropertyRef Name="CorrespondenceTypeId"/>
+					<PropertyRef Name="MailTemplateId"/>
+					<PropertyRef Name="Language"/>
+				</Key>
+				<Property MaxLength="5" Name="Event" Nullable="false" Type="Edm.String" sap:creatable="false" sap:label="Event" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="VariantId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Variant ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="CorrespondenceTypeId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="ID" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="30" Name="MailTemplateId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Email Template" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="2" Name="Language" Nullable="false" Type="Edm.String" sap:creatable="false" sap:label="Language" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="60" Name="Name" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Name" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="ParametersGroup" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Event"/>
+					<PropertyRef Name="VariantId"/>
+					<PropertyRef Name="CorrespondenceTypeId"/>
+					<PropertyRef Name="Id"/>
+				</Key>
+				<Property MaxLength="5" Name="Event" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Event" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="VariantId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Variant" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="CorrespondenceTypeId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Corr. Identifier" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="5" Name="Id" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Parameters Group" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="30" Name="Caption" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Group label" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="InLine" Nullable="false" Type="Edm.Boolean" sap:creatable="false" sap:filterable="false" sap:label="Inline display" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="2" Name="Position" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Group position" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="EmailPreviewTemplate" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="MailTemplateId"/>
+					<PropertyRef Name="Language"/>
+				</Key>
+				<Property MaxLength="30" Name="MailTemplateId" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Email Template" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="2" Name="Language" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Lang. (ISO)" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property MaxLength="255" Name="Subject" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Email Subject" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="Preview_html" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Email Template: Body HTML" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+				<Property Name="Preview_txt" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Email Template: Body TXT" sap:sortable="false" sap:unicode="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="C_CorrespondenceCompanyCodeVHType" sap:content-version="1" sap:label="Correspondence Company Code Value Help" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="CompanyCode"/>
+				</Key>
+				<Property MaxLength="4" Name="CompanyCode" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Company Code" sap:text="CompanyCodeName"/>
+				<Property MaxLength="25" Name="CompanyCodeName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="Company Name" sap:quickinfo="Name of Company Code or Company"/>
+				<Property MaxLength="25" Name="CityName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="City"/>
+				<Property MaxLength="5" Name="Currency" Type="Edm.String" sap:filter-restriction="single-value" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+			</EntityType>
+			<EntityType Name="C_CorrespondenceCustomerVHType" sap:content-version="1" sap:label="Correspondence Customer Value Help" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="Customer"/>
+					<PropertyRef Name="CompanyCode"/>
+				</Key>
+				<Property MaxLength="10" Name="Customer" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Customer" sap:quickinfo="Customer Number" sap:text="CustomerName"/>
+				<Property MaxLength="4" Name="CompanyCode" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Company Code"/>
+				<Property MaxLength="35" Name="CustomerName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="Name" sap:quickinfo="Name 1"/>
+				<Property MaxLength="35" Name="CityName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="City"/>
+				<Property MaxLength="10" Name="PostalCode" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Postal Code"/>
+				<Property MaxLength="3" Name="Country" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Country" sap:quickinfo="Country Key"/>
+				<Property MaxLength="4" Name="CustomerAccountGroup" Type="Edm.String" sap:display-format="UpperCase" sap:label="Account Group" sap:visible="false"/>
+				<Property MaxLength="4" Name="AuthorizationGroup" Type="Edm.String" sap:display-format="UpperCase" sap:label="Authorization Group" sap:visible="false"/>
+				<Property MaxLength="4" Name="CoCodeSpcfcAuthorizationGroup" Type="Edm.String" sap:display-format="UpperCase" sap:label="Authorization Group" sap:visible="false"/>
+			</EntityType>
+			<EntityType Name="C_CorrespondenceSupplierVHType" sap:content-version="1" sap:label="Correspondence Supplier Value Help" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="Supplier"/>
+					<PropertyRef Name="CompanyCode"/>
+				</Key>
+				<Property MaxLength="10" Name="Supplier" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Supplier" sap:text="SupplierName"/>
+				<Property MaxLength="4" Name="CompanyCode" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Company Code"/>
+				<Property MaxLength="35" Name="SupplierName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="Name" sap:quickinfo="Name 1"/>
+				<Property MaxLength="35" Name="CityName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="City"/>
+				<Property MaxLength="10" Name="PostalCode" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Postal Code"/>
+				<Property MaxLength="3" Name="Country" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Country" sap:quickinfo="Country Key"/>
+				<Property MaxLength="4" Name="Industry" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Industry"/>
+				<Property MaxLength="4" Name="SupplierAccountGroup" Type="Edm.String" sap:display-format="UpperCase" sap:label="Account Group" sap:visible="false"/>
+				<Property MaxLength="4" Name="AuthorizationGroup" Type="Edm.String" sap:display-format="UpperCase" sap:label="Authorization Group" sap:visible="false"/>
+				<Property MaxLength="4" Name="CoCodeSpcfcAuthorizationGroup" Type="Edm.String" sap:display-format="UpperCase" sap:label="Authorization Group" sap:visible="false"/>
+			</EntityType>
+			<EntityType Name="C_CpbupaemailvhType" sap:content-version="1" sap:label="Contact Information - Email" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="EmailAddress"/>
+					<PropertyRef Name="BusinessPartner"/>
+					<PropertyRef Name="CorrespondenceEmailSourceType"/>
+				</Key>
+				<Property MaxLength="241" Name="EmailAddress" Nullable="false" Type="Edm.String" sap:filter-restriction="single-value" sap:label="Email Address"/>
+				<Property MaxLength="10" Name="BusinessPartner" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filter-restriction="single-value" sap:label="Business Partner"/>
+				<Property MaxLength="1" Name="CorrespondenceEmailSourceType" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Source Type"/>
+				<Property MaxLength="40" Name="FirstName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="First Name"/>
+				<Property MaxLength="40" Name="LastName" Type="Edm.String" sap:filter-restriction="single-value" sap:label="Last Name"/>
+				<Property MaxLength="10" Name="ContactPerson" Type="Edm.String" sap:display-format="UpperCase" sap:label="Customer"/>
+				<Property MaxLength="4" Name="AuthorizationGroup" Type="Edm.String" sap:display-format="UpperCase" sap:label="Authorization Group" sap:visible="false"/>
+				<Property MaxLength="6" Name="RelationshipCategory" Type="Edm.String" sap:display-format="UpperCase" sap:label="Relationship Cat." sap:visible="false"/>
+				<Property MaxLength="4" Name="CompanyCode" Type="Edm.String" sap:display-format="UpperCase" sap:label="Company Code"/>
+				<Property MaxLength="60" Name="CorrespncEmailSourceTypeText" Type="Edm.String" sap:label="Email Source"/>
+				<Property MaxLength="80" Name="CorrespncAddrShortWthStrText" Type="Edm.String" sap:creatable="false" sap:display-format="UpperCase" sap:filterable="false" sap:label="Address" sap:sortable="false" sap:updatable="false"/>
+			</EntityType>
+			<EntityType Name="VL_SH_FFO_SHLP_SORT" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="PROGN"/>
+					<PropertyRef Name="ANWND"/>
+					<PropertyRef Name="SRVAR"/>
+				</Key>
+				<Property MaxLength="8" Name="PROGN" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filterable="false" sap:label="Program" sap:sortable="false"/>
+				<Property MaxLength="5" Name="ANWND" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filterable="false" sap:label="Application" sap:sortable="false"/>
+				<Property MaxLength="3" Name="SRVAR" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Sort Variant" sap:sortable="false"/>
+				<Property MaxLength="35" Name="SRBEZ" Type="Edm.String" sap:label="Description" sap:sortable="false"/>
+			</EntityType>
+			<EntityType Name="VL_SH_H_T012" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="BUKRS"/>
+					<PropertyRef Name="HBKID"/>
+				</Key>
+				<Property MaxLength="60" Name="BANKA" Type="Edm.String" sap:filterable="false" sap:label="Bank Name" sap:sortable="false"/>
+				<Property MaxLength="35" Name="ORT01" Type="Edm.String" sap:filterable="false" sap:label="City" sap:sortable="false"/>
+				<Property MaxLength="4" Name="BUKRS" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Company Code" sap:sortable="false"/>
+				<Property MaxLength="5" Name="HBKID" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="House Bank" sap:sortable="false"/>
+				<Property MaxLength="3" Name="BANKS" Type="Edm.String" sap:display-format="UpperCase" sap:label="Bank Country" sap:sortable="false"/>
+				<Property MaxLength="15" Name="BANKL" Type="Edm.String" sap:display-format="UpperCase" sap:label="Bank Key" sap:sortable="false"/>
+			</EntityType>
+			<EntityType Name="VL_SH_H_T012K" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="BUKRS"/>
+					<PropertyRef Name="HBKID"/>
+					<PropertyRef Name="HKTID"/>
+				</Key>
+				<Property MaxLength="4" Name="BUKRS" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Company Code" sap:sortable="false"/>
+				<Property MaxLength="5" Name="HBKID" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="House Bank" sap:sortable="false"/>
+				<Property MaxLength="5" Name="HKTID" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Account ID" sap:sortable="false"/>
+				<Property MaxLength="50" Name="TEXT1" Type="Edm.String" sap:label="Description" sap:sortable="false"/>
+			</EntityType>
+			<EntityType Name="VL_SH_H_TBSL" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="BSCHL"/>
+					<PropertyRef Name="KOART"/>
+					<PropertyRef Name="SHKZG"/>
+					<PropertyRef Name="LTEXT"/>
+				</Key>
+				<Property MaxLength="2" Name="BSCHL" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Posting Key" sap:sortable="false"/>
+				<Property MaxLength="1" Name="KOART" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Account Type" sap:sortable="false"/>
+				<Property MaxLength="1" Name="SHKZG" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Debit/Credit" sap:sortable="false"/>
+				<Property MaxLength="20" Name="LTEXT" Nullable="false" Type="Edm.String" sap:label="Name" sap:sortable="false"/>
+			</EntityType>
+			<EntityType Name="VL_SH_H_T074U" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="KOART"/>
+					<PropertyRef Name="UMSKZ"/>
+				</Key>
+				<Property MaxLength="1" Name="KOART" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Account Type" sap:sortable="false"/>
+				<Property MaxLength="1" Name="UMSKZ" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Special G/L" sap:sortable="false"/>
+				<Property MaxLength="30" Name="LTEXT" Type="Edm.String" sap:label="Description" sap:sortable="false"/>
+			</EntityType>
+			<EntityType Name="VL_FV_KORD10DV" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="Code"/>
+				</Key>
+				<Property MaxLength="1" Name="Code" Nullable="false" Type="Edm.String" sap:label="Value" sap:text="Text"/>
+				<Property MaxLength="60" Name="Text" Type="Edm.String" sap:label="Short Descript."/>
+			</EntityType>
+			<EntityType Name="VL_SH_FFO_PRINT_QUEUE" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="QUEUE_NAME"/>
+				</Key>
+				<Property MaxLength="12" Name="TECHNICAL_USER_ID" Type="Edm.String" sap:display-format="UpperCase" sap:filterable="false" sap:label="Technical User" sap:sortable="false"/>
+				<Property MaxLength="32" Name="QUEUE_NAME" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Unique ID of a Queue" sap:sortable="false"/>
+				<Property MaxLength="80" Name="DESCRIPTION" Type="Edm.String" sap:label="Queue Description" sap:sortable="false"/>
+			</EntityType>
+			<EntityType Name="VL_SH_FFO_PRINT_QUEUE_SPOOL" sap:content-version="1" sap:value-list="true">
+				<Key>
+					<PropertyRef Name="TECH_USER_NAME"/>
+					<PropertyRef Name="QNAME"/>
+					<PropertyRef Name="QDESCRIPTION"/>
+				</Key>
+				<Property MaxLength="12" Name="TECH_USER_NAME" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:filterable="false" sap:label="Technical User" sap:sortable="false"/>
+				<Property MaxLength="32" Name="QNAME" Nullable="false" Type="Edm.String" sap:display-format="UpperCase" sap:label="Unique ID of a Queue" sap:sortable="false"/>
+				<Property MaxLength="80" Name="QDESCRIPTION" Nullable="false" Type="Edm.String" sap:label="Queue Description" sap:sortable="false"/>
+			</EntityType>
+			<ComplexType Name="AuxiliaryTypeForAdvParams">
+				<Property MaxLength="3" Name="SORTVP" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Line item sorting" sap:sortable="false" sap:updatable="false" sap:value-list="standard"/>
+				<Property MaxLength="1" Name="DVSTID" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Standard key date" sap:sortable="false" sap:updatable="false" sap:value-list="fixed-values"/>
+				<Property MaxLength="3" Name="SORTVP2" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Clr. items sorting" sap:sortable="false" sap:updatable="false" sap:value-list="standard"/>
+				<Property MaxLength="5" Name="HBKID" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="House Bank" sap:sortable="false" sap:updatable="false" sap:value-list="standard"/>
+				<Property MaxLength="5" Name="HKTID" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Account" sap:sortable="false" sap:updatable="false" sap:value-list="standard"/>
+				<Property MaxLength="2" Name="BSCHL" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Posting Key" sap:sortable="false" sap:updatable="false" sap:value-list="standard"/>
+				<Property MaxLength="1" Name="UMSKZ" Nullable="false" Type="Edm.String" sap:creatable="false" sap:filterable="false" sap:label="Special G/L" sap:sortable="false" sap:updatable="false" sap:value-list="standard"/>
+			</ComplexType>
+			<Association Name="toXML" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toXML" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput"/>
+				<End Multiplicity="0..1" Role="ToRole_toXML" Type="FI_CORRESPONDENCE_V2_SRV.XML"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toXML">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Principal>
+					<Dependent Role="ToRole_toXML">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toEmail" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toEmail" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput"/>
+				<End Multiplicity="0..1" Role="ToRole_toEmail" Type="FI_CORRESPONDENCE_V2_SRV.Email"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toEmail">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Principal>
+					<Dependent Role="ToRole_toEmail">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toPrint" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toPrint" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput"/>
+				<End Multiplicity="0..1" Role="ToRole_toPrint" Type="FI_CORRESPONDENCE_V2_SRV.Print"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toPrint">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Principal>
+					<Dependent Role="ToRole_toPrint">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toFax" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toFax" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput"/>
+				<End Multiplicity="0..1" Role="ToRole_toFax" Type="FI_CORRESPONDENCE_V2_SRV.Fax"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toFax">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Principal>
+					<Dependent Role="ToRole_toFax">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toMessage" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toMessage" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput"/>
+				<End Multiplicity="*" Role="ToRole_toMessage" Type="FI_CORRESPONDENCE_V2_SRV.Message"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toMessage">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Principal>
+					<Dependent Role="ToRole_toMessage">
+						<PropertyRef Name="ApplObjectId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toPDF" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toPDF" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput"/>
+				<End Multiplicity="0..1" Role="ToRole_toPDF" Type="FI_CORRESPONDENCE_V2_SRV.PDF"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toPDF">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Principal>
+					<Dependent Role="ToRole_toPDF">
+						<PropertyRef Name="ApplicationObjectId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toSupportedChannel" sap:content-version="1">
+				<End Multiplicity="*" Role="FromRole_toSupportedChannel" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceType"/>
+				<End Multiplicity="*" Role="ToRole_toSupportedChannel" Type="FI_CORRESPONDENCE_V2_SRV.SupportedChannel"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toSupportedChannel">
+						<PropertyRef Name="Id"/>
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="Event"/>
+					</Principal>
+					<Dependent Role="ToRole_toSupportedChannel">
+						<PropertyRef Name="CorrespondenceTypeId"/>
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="Event"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toParametersGroup" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toParametersGroup" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceType"/>
+				<End Multiplicity="*" Role="ToRole_toParametersGroup" Type="FI_CORRESPONDENCE_V2_SRV.ParametersGroup"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toParametersGroup">
+						<PropertyRef Name="Event"/>
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="Id"/>
+					</Principal>
+					<Dependent Role="ToRole_toParametersGroup">
+						<PropertyRef Name="Event"/>
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="CorrespondenceTypeId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toParameter" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toParameter" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceType"/>
+				<End Multiplicity="*" Role="ToRole_toParameter" Type="FI_CORRESPONDENCE_V2_SRV.Parameter"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toParameter">
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="Id"/>
+						<PropertyRef Name="Event"/>
+					</Principal>
+					<Dependent Role="ToRole_toParameter">
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="CorrespondenceTypeId"/>
+						<PropertyRef Name="Event"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="toEmailTemplate" sap:content-version="1">
+				<End Multiplicity="1" Role="FromRole_toEmailTemplate" Type="FI_CORRESPONDENCE_V2_SRV.CorrespondenceType"/>
+				<End Multiplicity="*" Role="ToRole_toEmailTemplate" Type="FI_CORRESPONDENCE_V2_SRV.EmailTemplate"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toEmailTemplate">
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="Id"/>
+						<PropertyRef Name="Event"/>
+					</Principal>
+					<Dependent Role="ToRole_toEmailTemplate">
+						<PropertyRef Name="VariantId"/>
+						<PropertyRef Name="CorrespondenceTypeId"/>
+						<PropertyRef Name="Event"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityContainer Name="FI_CORRESPONDENCE_V2_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.C_CorrespondenceCompanyCodeVHType" Name="C_CorrespondenceCompanyCodeVH" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.C_CorrespondenceCustomerVHType" Name="C_CorrespondenceCustomerVH" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.C_CorrespondenceSupplierVHType" Name="C_CorrespondenceSupplierVH" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.C_CpbupaemailvhType" Name="C_Cpbupaemailvh" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_SH_FFO_SHLP_SORT" Name="VL_SH_FFO_SHLP_SORT" sap:content-version="1" sap:countable="false" sap:creatable="false" sap:deletable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_SH_H_T012" Name="VL_SH_H_T012" sap:content-version="1" sap:countable="false" sap:creatable="false" sap:deletable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_SH_H_T012K" Name="VL_SH_H_T012K" sap:content-version="1" sap:countable="false" sap:creatable="false" sap:deletable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_SH_H_TBSL" Name="VL_SH_H_TBSL" sap:content-version="1" sap:countable="false" sap:creatable="false" sap:deletable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_SH_H_T074U" Name="VL_SH_H_T074U" sap:content-version="1" sap:countable="false" sap:creatable="false" sap:deletable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_FV_KORD10DV" Name="VL_FV_KORD10DV" sap:content-version="1" sap:semantics="fixed-values"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_SH_FFO_PRINT_QUEUE" Name="VL_SH_FFO_PRINT_QUEUE" sap:content-version="1" sap:countable="false" sap:creatable="false" sap:deletable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.VL_SH_FFO_PRINT_QUEUE_SPOOL" Name="VL_SH_FFO_PRINT_QUEUE_SPOOL" sap:content-version="1" sap:countable="false" sap:creatable="false" sap:deletable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.DefaultValue" Name="DefaultValueSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.PDF" Name="PDFSet" sap:addressable="false" sap:content-version="1" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.XML" Name="XMLSet" sap:content-version="1" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Print" Name="PrintSet" sap:content-version="1" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Fax" Name="FaxSet" sap:content-version="1" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Email" Name="EmailSet" sap:content-version="1" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput" Name="CorrespondenceOutputSet" sap:content-version="1" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Message" Name="MessageSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.PrintType" Name="PrintTypeSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:label="Print Types" sap:pageable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Printer" Name="ValueHelpPrinters" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:label="Printers" sap:pageable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.SupportedChannel" Name="SupportedChannelSet" sap:addressable="false" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Result" Name="ResultCollection" sap:content-version="1"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.CorrespondenceType" Name="CorrespondenceTypeSet" sap:addressable="false" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:requires-filter="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Parameter" Name="ParameterSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.Configuration" Name="ConfigurationSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:label="Configuration" sap:pageable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.EmailTemplate" Name="EmailTemplateSet" sap:addressable="false" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:searchable="true" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.ParametersGroup" Name="ParametersGroupSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:updatable="false"/>
+				<EntitySet EntityType="FI_CORRESPONDENCE_V2_SRV.EmailPreviewTemplate" Name="EmailPreviewTemplateCollection" sap:content-version="1"/>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toFax" Name="toFaxSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceOutputSet" Role="FromRole_toFax"/>
+					<End EntitySet="FaxSet" Role="ToRole_toFax"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toPDF" Name="toPDFSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceOutputSet" Role="FromRole_toPDF"/>
+					<End EntitySet="PDFSet" Role="ToRole_toPDF"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toPrint" Name="toPrintSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceOutputSet" Role="FromRole_toPrint"/>
+					<End EntitySet="PrintSet" Role="ToRole_toPrint"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toMessage" Name="toMessageSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceOutputSet" Role="FromRole_toMessage"/>
+					<End EntitySet="MessageSet" Role="ToRole_toMessage"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toEmailTemplate" Name="toEmailTemplateSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceTypeSet" Role="FromRole_toEmailTemplate"/>
+					<End EntitySet="EmailTemplateSet" Role="ToRole_toEmailTemplate"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toEmail" Name="toEmailSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceOutputSet" Role="FromRole_toEmail"/>
+					<End EntitySet="EmailSet" Role="ToRole_toEmail"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toXML" Name="toXMLSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceOutputSet" Role="FromRole_toXML"/>
+					<End EntitySet="XMLSet" Role="ToRole_toXML"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toParameter" Name="toParameterSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceTypeSet" Role="FromRole_toParameter"/>
+					<End EntitySet="ParameterSet" Role="ToRole_toParameter"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toParametersGroup" Name="toParametersGroupSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceTypeSet" Role="FromRole_toParametersGroup"/>
+					<End EntitySet="ParametersGroupSet" Role="ToRole_toParametersGroup"/>
+				</AssociationSet>
+				<AssociationSet Association="FI_CORRESPONDENCE_V2_SRV.toSupportedChannel" Name="toSupportedChannelSet" sap:content-version="1" sap:creatable="false" sap:deletable="false" sap:updatable="false">
+					<End EntitySet="CorrespondenceTypeSet" Role="FromRole_toSupportedChannel"/>
+					<End EntitySet="SupportedChannelSet" Role="ToRole_toSupportedChannel"/>
+				</AssociationSet>
+				<FunctionImport EntitySet="DefaultValueSet" Name="getDefaultValues" ReturnType="Collection(FI_CORRESPONDENCE_V2_SRV.DefaultValue)" m:HttpMethod="GET" sap:action-for="FI_CORRESPONDENCE_V2_SRV.DefaultValue">
+					<Parameter Mode="In" Name="Date2" Precision="7" Type="Edm.DateTime"/>
+					<Parameter Mode="In" Name="Date1" Precision="7" Type="Edm.DateTime"/>
+					<Parameter MaxLength="4" Mode="In" Name="FiscalYear" Type="Edm.String"/>
+					<Parameter MaxLength="10" Mode="In" Name="DocumentNumber" Type="Edm.String"/>
+					<Parameter MaxLength="16" Mode="In" Name="VendorNumber" Type="Edm.String"/>
+					<Parameter MaxLength="16" Mode="In" Name="CustomerNumber" Type="Edm.String"/>
+					<Parameter MaxLength="4" Mode="In" Name="CompanyCode" Type="Edm.String"/>
+					<Parameter MaxLength="5" Mode="In" Name="VariantId" Type="Edm.String"/>
+					<Parameter MaxLength="5" Mode="In" Name="CorrespondenceTypeId" Type="Edm.String"/>
+					<Parameter MaxLength="5" Mode="In" Name="Event" Type="Edm.String"/>
+				</FunctionImport>
+				<FunctionImport EntitySet="EmailPreviewTemplateCollection" Name="renderEmailTemplate" ReturnType="FI_CORRESPONDENCE_V2_SRV.EmailPreviewTemplate" m:HttpMethod="GET">
+					<Parameter MaxLength="10" Mode="In" Name="VendorNumber" Type="Edm.String"/>
+					<Parameter MaxLength="2" Mode="In" Name="Language" Type="Edm.String"/>
+					<Parameter MaxLength="30" Mode="In" Name="MailTemplateId" Type="Edm.String"/>
+					<Parameter MaxLength="4" Mode="In" Name="FiscalYear" Type="Edm.String"/>
+					<Parameter MaxLength="10" Mode="In" Name="DocumentNumber" Type="Edm.String"/>
+					<Parameter MaxLength="8" Mode="In" Name="Date2" Type="Edm.String"/>
+					<Parameter MaxLength="8" Mode="In" Name="Date1" Type="Edm.String"/>
+					<Parameter MaxLength="4" Mode="In" Name="CompanyCode" Type="Edm.String"/>
+					<Parameter MaxLength="10" Mode="In" Name="CustomerNumber" Type="Edm.String"/>
+				</FunctionImport>
+			</EntityContainer>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.C_CorrespondenceCompanyCodeVHType" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="Common.SemanticKey">
+					<Collection>
+						<PropertyPath>CompanyCode</PropertyPath>
+					</Collection>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.C_CorrespondenceCustomerVHType" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="Common.SemanticKey">
+					<Collection>
+						<PropertyPath>CompanyCode</PropertyPath>
+					</Collection>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.C_CorrespondenceSupplierVHType" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="Common.SemanticKey">
+					<Collection>
+						<PropertyPath>CompanyCode</PropertyPath>
+					</Collection>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.AuxiliaryTypeForAdvParams/SORTVP" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="search help to get sort options for line items"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_FFO_SHLP_SORT"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="SORTVP"/>
+									<PropertyValue Property="ValueListProperty" String="SRVAR"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="SRBEZ"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.AuxiliaryTypeForAdvParams/DVSTID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Standard key date for due dates"/>
+						<PropertyValue Property="CollectionPath" String="VL_FV_KORD10DV"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="DVSTID"/>
+									<PropertyValue Property="ValueListProperty" String="Code"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Text"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.AuxiliaryTypeForAdvParams/SORTVP2" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="search help to get sort options for line items"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_FFO_SHLP_SORT"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="SORTVP2"/>
+									<PropertyValue Property="ValueListProperty" String="SRVAR"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="SRBEZ"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.AuxiliaryTypeForAdvParams/HBKID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Help_View for Table T012"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_H_T012"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="BUKRS"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="HBKID"/>
+									<PropertyValue Property="ValueListProperty" String="HBKID"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="BANKS"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="BANKL"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="BANKA"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="ORT01"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.AuxiliaryTypeForAdvParams/HKTID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Help_View for Table T012K"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_H_T012K"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="BUKRS"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="HBKID"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="HKTID"/>
+									<PropertyValue Property="ValueListProperty" String="HKTID"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="TEXT1"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.AuxiliaryTypeForAdvParams/BSCHL" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Help_View for TBSL"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_H_TBSL"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="BSCHL"/>
+									<PropertyValue Property="ValueListProperty" String="BSCHL"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="KOART"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="SHKZG"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="LTEXT"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.AuxiliaryTypeForAdvParams/UMSKZ" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Help_View for T074U"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_H_T074U"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="KOART"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="UMSKZ"/>
+									<PropertyValue Property="ValueListProperty" String="UMSKZ"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="LTEXT"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.Email/To" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Search help for Contact Person and Business Partner Email"/>
+						<PropertyValue Property="CollectionPath" String="C_Cpbupaemailvh"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="To"/>
+									<PropertyValue Property="ValueListProperty" String="EmailAddress"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="BusinessPartner"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="FirstName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="LastName"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.Print/Printer" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Search help for spool output devices"/>
+						<PropertyValue Property="CollectionPath" String="ValueHelpPrinters"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="Printer"/>
+									<PropertyValue Property="ValueListProperty" String="ShortDeviceName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="LongDeviceName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="LocationStatusMessage"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.Print/PrintQueue" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Print Queue"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_FFO_PRINT_QUEUE"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="PrintQueue"/>
+									<PropertyValue Property="ValueListProperty" String="QUEUE_NAME"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="DESCRIPTION"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="TECHNICAL_USER_ID"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.Print/PrintQueueSpool" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Search help to find Print Queue"/>
+						<PropertyValue Property="CollectionPath" String="VL_SH_FFO_PRINT_QUEUE_SPOOL"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="PrintQueueSpool"/>
+									<PropertyValue Property="ValueListProperty" String="QNAME"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="QDESCRIPTION"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="TECH_USER_NAME"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput/CustomerNumber" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Customers (by company code)"/>
+						<PropertyValue Property="CollectionPath" String="C_CorrespondenceCustomerVH"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="CustomerNumber"/>
+									<PropertyValue Property="ValueListProperty" String="Customer"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="CompanyCode"/>
+									<PropertyValue Property="ValueListProperty" String="CompanyCode"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="CustomerName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="CityName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="PostalCode"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Country"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput/VendorNumber" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Suppliers by Company Code"/>
+						<PropertyValue Property="CollectionPath" String="C_CorrespondenceSupplierVH"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="VendorNumber"/>
+									<PropertyValue Property="ValueListProperty" String="Supplier"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="CompanyCode"/>
+									<PropertyValue Property="ValueListProperty" String="CompanyCode"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="SupplierName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="CityName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="PostalCode"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Country"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Industry"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="FI_CORRESPONDENCE_V2_SRV.CorrespondenceOutput/CompanyCode" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+				<Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+					<Record>
+						<PropertyValue Property="Label" String="Company Codes"/>
+						<PropertyValue Property="CollectionPath" String="C_CorrespondenceCompanyCodeVH"/>
+						<PropertyValue Bool="true" Property="SearchSupported"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="CompanyCode"/>
+									<PropertyValue Property="ValueListProperty" String="CompanyCode"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="CompanyCodeName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="CityName"/>
+								</Record>
+								<Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Currency"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<atom:link href="localhost/sap/opu/odata/sap/FI_CORRESPONDENCE_V2_SRV/$metadata" rel="self" xmlns:atom="http://www.w3.org/2005/Atom"/>
+			<atom:link href="localhost/sap/opu/odata/sap/FI_CORRESPONDENCE_V2_SRV/$metadata" rel="latest-version" xmlns:atom="http://www.w3.org/2005/Atom"/>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

@@ -1,0 +1,288 @@
+<!--
+
+    Copyright (C) 2009-2022 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View controllerName="fin.ar.correspondence.create.v2.controller.Main" xmlns:html="http://www.w3.org/1999/xhtml"
+		  xmlns:mvc="sap.ui.core.mvc"
+		  xmlns:core="sap.ui.core"
+		  xmlns="sap.m"
+		  xmlns:semantic="sap.m.semantic"
+		  xmlns:footerbar="sap.ushell.ui.footerbar">
+	<SplitApp id="idPage" mode="StretchCompressMode">
+		<masterPages>
+			<semantic:MasterPage id="idMasterPage">
+
+				<semantic:customHeaderContent>
+					<Toolbar
+							id="idMasterToolbar"
+							height="{= ${device>/system/phone} ? 'auto' : '2.2em'}"
+							width="100%"
+					>
+						<core:InvisibleText
+								id="idSelectAllLabelTitle"
+								text="{i18n>SELECT_ALL_TOOLTIP}"
+						/>
+
+						<CheckBox
+								id="idSelectAllButton"
+								ariaLabelledBy="idSelectAllLabelTitle"
+								select="onSelectAllAction"
+								selected="{state>/SelectAll}"
+								tooltip="{i18n>SELECT_ALL_TOOLTIP}"
+								visible="{state>/SelectAllVisible}"
+						/>
+						<ToolbarSpacer id="idSpacerBeforeCorrespondenceListTitle"/>
+						<Text
+								id="idCorrespondenceListTitle"
+								text="{= ${i18n>MASTER_TITLE} + ( (Object.keys(${corrItems>/}).length) ? (' (' + (Object.keys(${corrItems>/}).length) + ')') : '' ) }"
+						/>
+						<ToolbarSpacer id="idSpacerAfterCorrespondenceListTitle"/>
+						<Button
+								icon="{= ${state>/ListMode} === 'MultiSelect' ? 'sap-icon://sys-cancel' : 'sap-icon://multi-select' }"
+								id="idMultiSelect"
+								press="onMultiSelectAction"
+								tooltip="{= ${state>/ListMode} === 'MultiSelect' ? ${i18n>MULTI_SELECT_OFF_TOOLTIP} : ${i18n>MULTI_SELECT_TOOLTIP} }"
+								visible="{globalSettings>/MultiSelect}"
+								enabled="{= !!(Object.keys(${corrItems>/}).length) }"
+						/>
+					</Toolbar>
+				</semantic:customHeaderContent>
+				<semantic:content>
+					<List
+							id="idCorrItemsList"
+							selectionChange="onListItemSelect"
+							itemPress="onListItemPress"
+							mode="{state>/ListMode}"
+					>
+						<items>
+						</items>
+					</List>
+				</semantic:content>
+
+				<semantic:customFooterContent>
+					<Button
+							id="idMessagePopoverButton"
+							visible="{= ${popover>/messages}.length &gt; 0}"
+							text="{= ${popover>/messages}.length }"
+							icon="sap-icon://message-popup"
+							type="Emphasized"
+							press="onMessagePopover"
+					/>
+					<OverflowToolbarButton
+							icon="sap-icon://show"
+							text="{i18n>PREVIEW}"
+							tooltip="{i18n>PREVIEW}"
+							press="onMassPreviewPressed"
+							id="idMassPreviewButton"
+							visible="{= ${globalSettings>/MassPreviewAction} &amp;&amp; ${display>/PreviewButton}}"
+							enabled="{state>/MassPreview}"
+					/>
+					<OverflowToolbarButton
+							icon="sap-icon://email"
+							enabled="{= ${state>/MassEmail} &amp;&amp; ( ${state>/ListMode} === 'MultiSelect' ? true : !!${corrItems>Enabled/EmailButton} ) }"
+							text="{i18n>EMAIL}"
+							tooltip="{i18n>EMAIL}"
+							press="onMassEmailPressed"
+							id="idMassEmailButton"
+							visible="{= ${globalSettings>/MassEmailAction} &amp;&amp; ${display>/EmailButton}}"
+					/>
+					<OverflowToolbarButton
+							icon="sap-icon://print"
+							enabled="{= ${state>/MassPrint} &amp;&amp; ( ${state>/ListMode} === 'MultiSelect' ? true : !!${corrItems>Enabled/PrintButton} ) }"
+							text="{i18n>PRINT}"
+							tooltip="{i18n>PRINT}"
+							press="onMassPrintPressed"
+							id="idMassPrintButton"
+							visible="{= ${globalSettings>/MassPrintAction} &amp;&amp; ${display>/PrintButton}}"
+					/>
+					<OverflowToolbarButton
+							icon="sap-icon://add"
+							press="onAddPressed"
+							text="{i18n>ADD}"
+							tooltip="{i18n>ADD}"
+							id="idAddButton"
+							visible="{= ${globalSettings>/AddAction} &amp;&amp; ${display>/AddButton}}"
+					/>
+					<OverflowToolbarButton
+							icon="sap-icon://delete"
+							press="onDeletePressed"
+							text="{i18n>DELETE}"
+							tooltip="{i18n>DELETE}"
+							id="idMassDeleteButton"
+							enabled="{state>/MassDelete}"
+							visible="{= ${globalSettings>/DeleteAction} &amp;&amp; ${display>/MassDelete}}"
+					/>
+					<OverflowToolbarButton
+							icon="sap-icon://copy"
+							press="onCopyPressed"
+							text="{i18n>COPY}"
+							tooltip="{i18n>COPY}"
+							enabled="{state>/CopyButton}"
+							id="idCopyButton"
+							visible="{= ${globalSettings>/CopyAction} &amp;&amp; ${display>/CopyButton}}"
+					/>
+					<OverflowToolbarButton
+							icon="sap-icon://customer-history"
+							enabled="{state>/DisplayHistoryButton}"
+							text="{i18n>DISPLAY_HISTORY}"
+							tooltip="{i18n>DISPLAY_HISTORY}"
+							press="onDisplayHistoryPressed"
+							id="idDisplayHistoryButton"
+							visible="{= ${globalSettings>/HistoryNavigation} &amp;&amp; ${display>/HistoryNavigationAvailable}}"
+					/>
+				</semantic:customFooterContent>
+			</semantic:MasterPage>
+		</masterPages>
+
+		<detailPages>
+			<semantic:DetailPage
+					id="idDetailPage"
+					title="{parts: [{path: 'corrItems>Title'}, {path: 'corrItems>Id'}], formatter: '.formatTitle'}"
+			>
+				<semantic:content>
+					<IconTabBar
+							expandable="false"
+							select="onTabSelect"
+							id="idIconTabBar"
+							class="sapUiResponsiveContentPadding"
+							upperCase="false"
+							stretchContentHeight="true"
+					>
+						<items>
+							<IconTabFilter
+									id="idIconTabBarFilterCorrespondenceData"
+									tooltip="{i18n>CORRESPONDENCE_TAB_LABEL}"
+									text="{i18n>CORRESPONDENCE_TAB_LABEL}"
+									enabled="{state>/PreviewButton}"
+							>
+
+								<content>
+									<ScrollContainer
+											id="idScrollContainer"
+											height="100%"
+											width="100%"
+											vertical="true"
+											horizontal="false">
+										<core:Fragment
+												fragmentName="fin.ar.correspondence.create.v2.view.CorrForm"
+												type="XML"
+										/>
+									</ScrollContainer>
+								</content>
+
+							</IconTabFilter>
+							<IconTabFilter
+									id="idIconTabBarFilterPdf"
+									tooltip="{i18n>PDF_TAB_LABEL}"
+									text="{i18n>PDF_TAB_LABEL}"
+									enabled="{state>/PreviewButton}"
+							>
+
+								<content>
+									<PDFViewer
+											id="idPdf"
+											visible="{corrItems>State/IsPdfViewerVisible}"
+											source="{corrItems>PdfPath}"
+									/>
+								</content>
+
+							</IconTabFilter>
+							<IconTabFilter
+									id="idIconTabBarFilterEmail"
+									tooltip="{i18n>EMAIL_TAB_LABEL}"
+									text="{i18n>EMAIL_TAB_LABEL}"
+									visible="{globalSettings>/EmailPreview}"
+									enabled="{= ${state>/EmailButton} &amp;&amp; ${corrItems>Enabled/EmailButton}}"
+							>
+							</IconTabFilter>
+							<IconTabFilter
+									id="idIconTabBarAttachments"
+									tooltip="{i18n>ATTACH_TAB_LABEL}"
+									text="{i18n>ATTACH_TAB_LABEL}"
+									enabled="{state>/PreviewButton}"
+							>
+
+								<content>
+									<PDFViewer
+											id="idPdf1"
+											visible="{corrItems>State/IsPdfViewerVisible}"
+											source="{corrItems>PdfPath}"
+									/>
+								</content>
+
+							</IconTabFilter>
+						</items>
+					</IconTabBar>
+				</semantic:content>
+
+				<semantic:customFooterContent>
+					<Button
+							text="{i18n>PREVIEW}"
+							type="Emphasized"
+							press="onPreviewPressed"
+							id="idPreview"
+							visible="{= ${globalSettings>/PreviewAction} &amp;&amp; ${display>/PreviewButton}}"
+							enabled="{state>/PreviewButton}"
+					/>
+					<Button
+							text="{i18n>EMAIL}"
+							enabled="{= ${state>/EmailButton} &amp;&amp; ${corrItems>Enabled/EmailButton}}"
+							press="onEmailPressed"
+							id="idEmail"
+							visible="{= ${globalSettings>/EmailAction} &amp;&amp; ${display>/EmailButton}}"
+					/>
+					<Button
+							text="{i18n>DownloadXML}"
+							type="Emphasized"
+							press="onDownloadXMLPressed"
+							id="idDownloadXML"
+							visible="{= !${globalSettings>/NotDownloadXML}}"
+							enabled="{state>/DownloadXMLButton}"
+					/>
+					<Button
+							text="{i18n>PRINT}"
+							enabled="{= ${state>/PrintButton} &amp;&amp; ${corrItems>Enabled/PrintButton}}"
+							press="onPrintPressed"
+							id="idPrint"
+							visible="{= ${globalSettings>/PrintAction} &amp;&amp; ${display>/PrintButton}}"
+					/>
+				</semantic:customFooterContent>
+
+				<semantic:sendEmailAction>
+					<semantic:SendEmailAction
+							id="idShareEmail"
+							press="onShareEmailPress"
+							visible="{globalSettings>/Share}"
+					/>
+				</semantic:sendEmailAction>
+
+				<semantic:shareInJamAction>
+					<semantic:ShareInJamAction
+							id="idShareInJam"
+							visible="{= ${FLP>/isShareInJamActive} &amp;&amp; ${globalSettings>/Share}}"
+							press="onShareInJamPress"
+					/>
+				</semantic:shareInJamAction>
+
+				<semantic:saveAsTileAction>
+					<footerbar:AddBookmarkButton
+							id="idSaveTile"
+							title="{i18n>BOOKMARK_TITLE}"
+							press="onMenuOptionPressedSaveTile"
+							visible="{= ${globalSettings>/SaveAsTile} &amp;&amp; ${globalSettings>/Share}}"
+					/>
+				</semantic:saveAsTileAction>
+
+				<semantic:pagingAction>
+					<PagingButton
+							id="idPagingButton"
+							positionChange="onPositionChange"
+							previousButtonTooltip="{i18n>PREVIOUS_CORR}"
+							nextButtonTooltip="{i18n>NEXT_CORR}"
+					/>
+				</semantic:pagingAction>
+			</semantic:DetailPage>
+		</detailPages>
+	</SplitApp>
+</mvc:View>
